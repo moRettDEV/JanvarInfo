@@ -280,18 +280,25 @@
   var TOC_L = "\u041e\u0433\u043b\u0430\u0432\u043b\u0435\u043d\u0438\u0435";
   var PAGES_L = "\u0421\u0442\u0430\u0442\u044c\u0438";
   var NO_TOC = "\u041d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435 \u043d\u0435\u0442 \u0440\u0430\u0437\u0434\u0435\u043b\u043e\u0432";
-  var SERIES_L = "\u0421\u0435\u0440\u0438\u044f";
-  var T_ALL = "\u0412\u0441\u0435 \u0441\u0442\u0430\u0442\u044c\u0438";
+  var SERIES_L = "\u0420\u0430\u0437\u0434\u0435\u043b\u044b";
+  var T_ALL = "\u0413\u043b\u0430\u0432\u043d\u0430\u044f";
   var T_FLAGS = "\u0424\u043b\u0430\u0433\u0438 \u043a\u043e\u043c\u043f\u043b\u0435\u043a\u0442\u0430\u0446\u0438\u0438";
   var T_START = "\u0420\u0435\u0436\u0438\u043c \u041f\u0443\u0441\u043a";
   var T_IDLE = "\u041f\u0435\u0440\u0435\u0445\u043e\u0434 / \u0425\u043e\u043b\u043e\u0441\u0442\u043e\u0439 \u0445\u043e\u0434";
   var T_FIRM = "\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043f\u0440\u043e\u0448\u0438\u0432\u043a\u0438";
   var T_INJ = "Injector Online";
   var T_J5 = "J5LS V43A";
+  var T_GUIDE = "\u041e\u0442 \u041e\u041b\u0422 \u0434\u043e \u0431\u043b\u043e\u043a\u0430 \u043a\u043b\u0438\u0435\u043d\u0442\u0430";
+  var T_HW = "\u0416\u0435\u043b\u0435\u0437\u043e \u0438 \u041e\u041b\u0422";
+  var T_OLT = "J5 / J7 Online";
+  var T_CTP = "CTP 3.21";
+  var RELOAD_L = "\u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c";
+  var RESET_L = "\u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c \u0433\u0430\u043b\u043e\u0447\u043a\u0438";
 
   function icon(kind) {
     if (kind === "search") return '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>';
     if (kind === "toc") return '<svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h10"/></svg>';
+    if (kind === "reload") return '<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v6h-6"/></svg>';
     return '<svg viewBox="0 0 24 24"><path d="M6 5h9l3 3v11H6z"/><path d="M9 10h6M9 14h6"/></svg>';
   }
 
@@ -318,6 +325,16 @@
     var f = it.file || "";
     var p = (it.page || it.title || "").toLowerCase();
     if (f === "index.html" || /TRS249/.test(f)) return T_ALL;
+    if (f === "setup.html") return T_GUIDE;
+    if (f === "hw.html") return T_HW;
+    if (f === "ctp.html") return T_CTP;
+    if (f === "olt.html") return T_OLT;
+    if (f === "setup-trs-dmrv.html") return "TRS \u00b7 \u0414\u041c\u0420\u0412";
+    if (f === "setup-trs-dad.html") return "TRS \u00b7 \u0414\u0410\u0414";
+    if (f === "setup-trs-turbo.html") return "TRS \u00b7 \u0442\u0443\u0440\u0431\u043e";
+    if (f === "setup-ls-dmrv.html") return "LS \u00b7 \u0414\u041c\u0420\u0412";
+    if (f === "setup-ls-dad.html") return "LS \u00b7 \u0414\u0410\u0414";
+    if (f === "setup-ls-turbo.html") return "LS \u00b7 \u0442\u0443\u0440\u0431\u043e";
     if (f.indexOf("InjOnl") >= 0) return T_INJ;
     if (f.toLowerCase().indexOf("j5ls") >= 0) return T_J5;
     if (p.indexOf("\u0444\u043b\u0430\u0433") >= 0) return T_FLAGS;
@@ -328,14 +345,19 @@
 
   function pageRank(p) {
     if (p.file === "index.html" || /TRS249/.test(p.file)) return 0;
+    if (p.file === "setup.html" || p.title === T_GUIDE) return 1;
+    if (p.file.indexOf("setup-") === 0) return 2;
+    if (p.file === "ctp.html" || p.title === T_CTP) return 3;
+    if (p.file === "olt.html" || p.title === T_OLT) return 4;
+    if (p.file === "hw.html" || p.title === T_HW) return 5;
     var t = p.title;
-    if (t === T_FLAGS) return 1;
-    if (t === T_START) return 2;
-    if (t === T_IDLE) return 3;
-    if (t === T_FIRM) return 4;
-    if (p.file.indexOf("InjOnl") >= 0) return 5;
-    if (p.file.toLowerCase().indexOf("j5ls") >= 0) return 6;
-    return 7;
+    if (t === T_FLAGS) return 6;
+    if (t === T_START) return 7;
+    if (t === T_IDLE) return 8;
+    if (t === T_FIRM) return 9;
+    if (p.file.indexOf("InjOnl") >= 0) return 10;
+    if (p.file.toLowerCase().indexOf("j5ls") >= 0) return 11;
+    return 11;
   }
 
   function collectPages() {
@@ -427,10 +449,15 @@
       bar.innerHTML =
         '<button type="button" data-sheet="search">' + icon("search") + "<span>" + SEARCH_L + "</span></button>" +
         '<button type="button" data-sheet="toc">' + icon("toc") + "<span>" + TOC_L + "</span></button>" +
-        '<button type="button" data-sheet="pages">' + icon("pages") + "<span>" + PAGES_L + "</span></button>";
+        '<button type="button" data-sheet="pages">' + icon("pages") + "<span>" + PAGES_L + "</span></button>" +
+        '<button type="button" data-act="reload">' + icon("reload") + "<span>" + RELOAD_L + "</span></button>";
       bar.addEventListener("click", function (e) {
         var btn = e.target.closest("button");
         if (!btn) return;
+        if (btn.getAttribute("data-act") === "reload") {
+          location.reload();
+          return;
+        }
         toggleSheet(btn.getAttribute("data-sheet"));
       });
       document.body.appendChild(bar);
@@ -456,6 +483,41 @@
 
   setupMobile();
 
+  (function bindChecks() {
+    var all = document.querySelectorAll("input[data-check]");
+    if (!all.length) return;
+    var key = "trsChecks:" + decodeURIComponent((location.pathname.split("/").pop() || "setup"));
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem(key) || "{}"); } catch (e) {}
+    function paint() {
+      var on = 0;
+      Array.prototype.forEach.call(all, function (inp) {
+        if (inp.checked) on++;
+      });
+      var bar = document.getElementById("checkProgress");
+      if (bar) bar.textContent = on + " / " + all.length;
+    }
+    Array.prototype.forEach.call(all, function (inp) {
+      inp.checked = !!saved[inp.getAttribute("data-check")];
+      inp.addEventListener("change", function () {
+        saved[inp.getAttribute("data-check")] = inp.checked;
+        try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) {}
+        paint();
+      });
+    });
+    var reset = document.getElementById("checkReset");
+    if (reset) {
+      reset.textContent = RESET_L;
+      reset.addEventListener("click", function () {
+        saved = {};
+        try { localStorage.removeItem(key); } catch (e) {}
+        Array.prototype.forEach.call(all, function (inp) { inp.checked = false; });
+        paint();
+      });
+    }
+    paint();
+  })();
+
   var zoomImgs = Array.prototype.slice.call(document.querySelectorAll("article img, .page figure img"));
   var zoomI = -1;
   var zoomLock = 0;
@@ -465,10 +527,42 @@
     '<button type="button" class="zoom-nav zoom-prev" aria-label="Prev">&#8249;</button>' +
     '<img alt="">' +
     '<button type="button" class="zoom-nav zoom-next" aria-label="Next">&#8250;</button>' +
+    '<div class="zoom-tools"><button type="button" class="zoom-z" data-z="-1">\u2212</button>' +
+    '<button type="button" class="zoom-z" data-z="1">+</button></div>' +
     '<div class="zoom-cap"></div>';
   document.body.appendChild(zoom);
   var zoomPic = zoom.querySelector("img");
   var zoomCap = zoom.querySelector(".zoom-cap");
+  var zScale = 1;
+  var zX = 0;
+  var zY = 0;
+  var pinch0 = 0;
+  var panX = 0;
+  var panY = 0;
+  var lastTap = 0;
+  var swipeX = 0;
+  var didPinch = false;
+
+  function applyView() {
+    zoomPic.style.transform = "translate(" + zX + "px," + zY + "px) scale(" + zScale + ")";
+  }
+  function resetView() {
+    zScale = 1;
+    zX = 0;
+    zY = 0;
+    applyView();
+  }
+  function bumpScale(dir) {
+    zScale = Math.min(5, Math.max(1, zScale + dir * 0.4));
+    if (zScale === 1) { zX = 0; zY = 0; }
+    applyView();
+    zoomLock = Date.now();
+  }
+  function touchDist(a, b) {
+    var dx = a.clientX - b.clientX;
+    var dy = a.clientY - b.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
 
   function showZoom(i) {
     if (!zoomImgs.length) return;
@@ -486,6 +580,7 @@
     var many = zoomImgs.length > 1;
     zoom.querySelector(".zoom-prev").hidden = !many;
     zoom.querySelector(".zoom-next").hidden = !many;
+    resetView();
     zoomLock = Date.now();
     document.body.classList.add("zoom-open");
     closeSheet();
@@ -494,6 +589,7 @@
     if (Date.now() - zoomLock < 450) return;
     document.body.classList.remove("zoom-open");
     zoomPic.removeAttribute("src");
+    resetView();
     zoomI = -1;
   }
 
@@ -510,20 +606,72 @@
   });
   zoom.addEventListener("click", function (e) {
     if (Date.now() - zoomLock < 450) return;
+    var zbtn = e.target.closest(".zoom-z");
+    if (zbtn) {
+      bumpScale(parseInt(zbtn.getAttribute("data-z"), 10));
+      return;
+    }
     if (e.target.classList.contains("zoom-prev")) showZoom(zoomI - 1);
     else if (e.target.classList.contains("zoom-next")) showZoom(zoomI + 1);
+    else if (e.target === zoomPic && zScale > 1.05) return;
     else hideZoom();
   });
-  var swipeX = 0;
   zoom.addEventListener("touchstart", function (e) {
-    swipeX = e.changedTouches[0].clientX;
-  }, { passive: true });
+    if (e.touches.length === 2) {
+      pinch0 = touchDist(e.touches[0], e.touches[1]);
+      didPinch = true;
+      zoomLock = Date.now();
+    } else if (e.touches.length === 1) {
+      swipeX = e.touches[0].clientX;
+      panX = e.touches[0].clientX;
+      panY = e.touches[0].clientY;
+    }
+  }, { passive: false });
+  zoom.addEventListener("touchmove", function (e) {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      var d = touchDist(e.touches[0], e.touches[1]);
+      if (pinch0) {
+        zScale = Math.min(5, Math.max(1, zScale * (d / pinch0)));
+        pinch0 = d;
+        if (zScale === 1) { zX = 0; zY = 0; }
+        applyView();
+      }
+      didPinch = true;
+      zoomLock = Date.now();
+    } else if (e.touches.length === 1 && zScale > 1.05) {
+      e.preventDefault();
+      zX += e.touches[0].clientX - panX;
+      zY += e.touches[0].clientY - panY;
+      panX = e.touches[0].clientX;
+      panY = e.touches[0].clientY;
+      applyView();
+      didPinch = true;
+    }
+  }, { passive: false });
   zoom.addEventListener("touchend", function (e) {
-    var dx = e.changedTouches[0].clientX - swipeX;
-    if (Math.abs(dx) > 50 && zoomImgs.length > 1) {
+    if (e.touches.length === 0 && e.target === zoomPic) {
+      var now = Date.now();
+      if (now - lastTap < 280) {
+        if (zScale > 1.2) resetView();
+        else { zScale = 2.2; applyView(); }
+        zoomLock = Date.now();
+        didPinch = true;
+      }
+      lastTap = now;
+    }
+    if (e.touches.length) return;
+    if (didPinch) {
+      didPinch = false;
+      pinch0 = 0;
+      return;
+    }
+    var dx = (e.changedTouches[0] && e.changedTouches[0].clientX) - swipeX;
+    if (zScale <= 1.05 && Math.abs(dx) > 50 && zoomImgs.length > 1) {
       zoomLock = Date.now();
       showZoom(zoomI + (dx < 0 ? 1 : -1));
     }
+    pinch0 = 0;
   }, { passive: true });
 
   document.addEventListener("keydown", function (e) {
