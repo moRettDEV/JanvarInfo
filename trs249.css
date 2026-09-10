@@ -271,6 +271,17 @@ figcaption {
   font-size: 14px;
 }
 
+.site-foot {
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.site-foot p { margin: 0 0 4px; }
+.site-foot p:last-child { margin-bottom: 0; }
+
 .toc-toggle { display: none; }
 
 .search-box {
