@@ -324,7 +324,7 @@
   function shortTitle(it) {
     var f = it.file || "";
     var p = (it.page || it.title || "").toLowerCase();
-    if (f === "index.html" || /TRS249/.test(f)) return T_ALL;
+    if (f === "index.html") return T_ALL;
     if (f === "setup.html") return T_GUIDE;
     if (f === "hw.html") return T_HW;
     if (f === "ctp.html") return T_CTP;
@@ -344,7 +344,7 @@
   }
 
   function pageRank(p) {
-    if (p.file === "index.html" || /TRS249/.test(p.file)) return 0;
+    if (p.file === "index.html") return 0;
     if (p.file === "setup.html" || p.title === T_GUIDE) return 1;
     if (p.file.indexOf("setup-") === 0) return 2;
     if (p.file === "ctp.html" || p.title === T_CTP) return 3;
@@ -363,8 +363,11 @@
   function collectPages() {
     var seen = {};
     var list = [];
+    var hereFolder = document.documentElement.getAttribute("data-folder") || "site";
+    list.push({ folder: hereFolder, file: "index.html", title: T_ALL });
+    seen[hereFolder + "/index.html"] = true;
     (window.SEARCH_INDEX || []).forEach(function (it) {
-      if (it.file === "index.html") return;
+      if (it.file === "index.html" || /TRS249/.test(it.file)) return;
       var k = it.folder + "/" + it.file;
       if (seen[k]) return;
       seen[k] = true;
