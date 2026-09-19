@@ -662,35 +662,37 @@ figcaption {
   article pre,
   article .formula,
   article dl,
-  figure,
   .check-list,
-  .chip-ds,
-  .note {
-    background: none;
+  .note,
+  .source,
+  figure,
+  .chip-ds {
+    background: rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: var(--blur);
+    backdrop-filter: var(--blur);
     border: 0;
-    border-radius: 0;
+    border-radius: 16px;
     box-shadow: none;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    padding: 0;
+    padding: 12px 14px;
+    margin: 1em 0;
   }
   .note {
-    padding: 0 0 0 12px;
-    border-left: 2px solid rgba(167, 139, 250, 0.55);
-    border-radius: 0;
+    border-left: 2px solid rgba(167, 139, 250, 0.45);
   }
   figure {
-    margin: 20px -16px;
-    padding: 0;
+    margin: 20px 0;
+    padding: 10px;
   }
   figure img,
   .chip-ds img {
-    background: transparent;
-    border-radius: 0;
+    display: block;
     width: 100%;
+    height: auto;
+    background: #f4f5f8;
+    border-radius: 10px;
   }
-  .chip-ds-grid { gap: 18px; }
-  figcaption { padding: 0 16px; }
+  .chip-ds-grid { gap: 14px; }
+  figcaption { padding: 8px 4px 0; }
   .shop a { border-radius: 999px; color: #f4f5f8; }
   .site-foot { border-top: 0; color: #9aa0b4; }
 
