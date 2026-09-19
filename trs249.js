@@ -296,10 +296,10 @@
   var RESET_L = "\u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c \u0433\u0430\u043b\u043e\u0447\u043a\u0438";
 
   function icon(kind) {
-    if (kind === "search") return '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>';
-    if (kind === "toc") return '<svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h10"/></svg>';
-    if (kind === "reload") return '<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v6h-6"/></svg>';
-    return '<svg viewBox="0 0 24 24"><path d="M6 5h9l3 3v11H6z"/><path d="M9 10h6M9 14h6"/></svg>';
+    if (kind === "search") return '<svg viewBox="0 0 25 25"><circle cx="11" cy="11" r="6.25"/><path d="M16.2 16.2L22 22"/></svg>';
+    if (kind === "toc") return '<svg viewBox="0 0 25 25"><path d="M4 7.5h17M4 12.5h17M4 17.5h12"/></svg>';
+    if (kind === "reload") return '<svg viewBox="0 0 25 25"><path d="M20.5 12.5a8 8 0 1 1-2.2-5.6"/><path d="M20.5 4.5v6h-6"/></svg>';
+    return '<svg viewBox="0 0 25 25"><path d="M6.5 5.5h9l3.5 3.5v12H6.5z"/><path d="M9.5 11.5h6M9.5 15.5h6"/></svg>';
   }
 
   function wrapPane(nodes, cls, title) {
@@ -405,6 +405,17 @@
   }
 
   function setupMobile() {
+    var vp = document.querySelector('meta[name="viewport"]');
+    if (vp && vp.content.indexOf("viewport-fit") < 0) {
+      vp.content = "width=device-width, initial-scale=1, viewport-fit=cover";
+    }
+    if (!document.querySelector('meta[name="theme-color"]')) {
+      var theme = document.createElement("meta");
+      theme.name = "theme-color";
+      theme.media = "(max-width: 980px)";
+      theme.content = "#000000";
+      document.head.appendChild(theme);
+    }
     if (!toc) return;
     var searchBox = toc.querySelector(".search-box");
     var tocH2 = toc.querySelector("h2");
