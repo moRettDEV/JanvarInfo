@@ -417,6 +417,7 @@
       document.head.appendChild(theme);
     }
     if (!toc) return;
+    if (!window.matchMedia("(max-width: 980px)").matches) return;
     var searchBox = toc.querySelector(".search-box");
     var tocH2 = toc.querySelector("h2");
     var tocBtn = document.getElementById("tocToggle");
@@ -448,6 +449,9 @@
       toc.appendChild(wrapPane([seriesBox], "pane-pages", PAGES_L));
     }
 
+    if (toc.parentNode !== document.body) {
+      document.body.appendChild(toc);
+    }
     if (!document.querySelector(".mob-back")) {
       var back = document.createElement("div");
       back.className = "mob-back";
